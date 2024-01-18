@@ -1,9 +1,7 @@
-# keepawake-rs
-[![Crates.io](https://img.shields.io/crates/v/keepawake)](https://crates.io/crates/keepawake)
-[![docs.rs](https://img.shields.io/docsrs/keepawake)](https://docs.rs/keepawake)
-[![CI](https://github.com/segevfiner/keepawake-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/segevfiner/keepawake-rs/actions/workflows/ci.yml)
+# keep-active
+Fork of [keepawake-rs](https://github.com/segevfiner/keepawake-rs) with the intention of adding the ability to keep status trackers (e.g. Skype, MS Teams etc.) active.
 
-Keep your computer awake. Like [`caffeinate`], [`systemd-inhibit`]/[`gnome-session-inhibit`], or [PowerToys Awake], but cross-platform and written in [Rust].
+Keep your computer awake (and active!). Like [`caffeinate`], [`systemd-inhibit`]/[`gnome-session-inhibit`], or [PowerToys Awake], but cross-platform and written in [Rust].
 
 [`caffeinate`]: https://ss64.com/osx/caffeinate.html
 [`systemd-inhibit`]: https://www.freedesktop.org/software/systemd/man/systemd-inhibit.html
@@ -31,16 +29,6 @@ Options:
 ```
 
 See [docs.rs/keepawake](https://docs.rs/keepawake) for library crate documentation and usage.
-
-## Installation
-
-### Cargo
-```sh
-cargo install keepawake -F bin
-```
-
-### Binaries
-Download from https://github.com/segevfiner/keepawake-rs/releases/latest.
 
 ## Completions
 Use: `keepawake --completions <SHELL>` to generate a completion script, you will have to install it
