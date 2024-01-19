@@ -32,6 +32,10 @@ struct Cli {
     #[arg(short, long)]
     sleep: bool,
 
+    /// Keep status trackers active
+    #[arg(short, long)]
+    status_active: bool,
+
     /// Generate shell completions
     #[arg(long, exclusive = true, value_enum, value_name = "SHELL")]
     completions: Option<Shell>,
@@ -48,6 +52,15 @@ struct Cli {
 
 fn main() -> Result<()> {
     let cli = Cli::parse();
+
+    // Start the activity simulation if the status_active flag is set
+    if cli.status_active {
+        thread::spawn(|| {
+            if let Err(e) = activity::simulate_activity() {
+                eprintln!("Failed to simulate activity: {}", e);
+            }
+        });
+    }
 
     if let Some(shell) = cli.completions {
         generate(shell, &mut Cli::command(), "keepawake", &mut io::stdout());
