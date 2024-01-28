@@ -11,8 +11,8 @@ use clap::{CommandFactory, Parser, ValueHint};
 use clap_complete::{generate, Shell};
 use shadow_rs::shadow;
 use sysinfo::{Pid, PidExt, ProcessRefreshKind, System, SystemExt};
-
 use keepawake::Builder;
+use keepawake::simulate_activity;
 
 shadow!(build);
 
@@ -21,19 +21,19 @@ shadow!(build);
     arg_required_else_help = true)]
 struct Cli {
     /// Keep display on
-    #[arg(short, long)]
+    #[arg(short = 'd', long)]
     display: bool,
 
     /// Keep system from idle sleeping
-    #[arg(short, long)]
+    #[arg(short = 'i', long)]
     idle: bool,
 
     /// Keep system from sleeping (Functionality and conditions for this to work vary by OS)
-    #[arg(short, long)]
+    #[arg(short = 's', long)]
     sleep: bool,
 
     /// Keep status trackers active
-    #[arg(short, long)]
+    #[arg(short = 'a', long)]  // Changed short option for status_active
     status_active: bool,
 
     /// Generate shell completions
@@ -42,7 +42,7 @@ struct Cli {
 
     /// Wait for the process with the specified PID to exit.
     /// This option is ignored when used with the COMMAND argument.
-    #[arg(short, value_name = "PID")]
+    #[arg(short = 'w', value_name = "PID")]  // Changed short option for wait
     wait: Option<u32>,
 
     /// Run the command and wait for it to exit, keeping the computer awake while it runs.
@@ -50,13 +50,15 @@ struct Cli {
     command: Vec<String>,
 }
 
+
 fn main() -> Result<()> {
     let cli = Cli::parse();
 
     // Start the activity simulation if the status_active flag is set
     if cli.status_active {
+        println!("Status active flag detected"); // Debug print
         thread::spawn(|| {
-            if let Err(e) = activity::simulate_activity() {
+            if let Err(e) = simulate_activity() {
                 eprintln!("Failed to simulate activity: {}", e);
             }
         });

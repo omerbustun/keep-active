@@ -29,7 +29,8 @@
 //! ```
 
 use anyhow::Result;
-
+use enigo::{Enigo, Key, MouseControllable, KeyboardControllable};
+use std::{thread, time::Duration};
 mod sys;
 
 /// Builder for a new [AwakeHandle].
@@ -126,4 +127,21 @@ impl Default for Builder {
 /// Keeps the machine or display awake (as configured), until dropped. Create using [Builder].
 pub struct AwakeHandle {
     _imp: sys::Awake,
+}
+
+// TODO: gradual movement  
+//       exit gracefully on Ctrl+C
+pub fn simulate_activity() -> Result<(), Box<dyn std::error::Error>> {
+    let mut enigo = Enigo::new();
+
+    loop {
+        enigo.mouse_move_relative(100, 100);
+        thread::sleep(Duration::from_secs(1));
+        enigo.mouse_move_relative(-100, -100);
+
+        enigo.key_down(Key::Shift);
+        enigo.key_up(Key::Shift);
+
+        thread::sleep(Duration::from_secs(2)); // TODO: make this configurable
+    }
 }
