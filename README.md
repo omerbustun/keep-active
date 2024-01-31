@@ -13,7 +13,7 @@ Keep your computer awake (and active!). Like [`caffeinate`], [`systemd-inhibit`]
 ```
 Keep your computer awake
 
-Usage: keepawake [OPTIONS] [COMMAND]...
+Usage: keep-active [OPTIONS] [COMMAND]...
 
 Arguments:
   [COMMAND]...  Run the command and wait for it to exit, keeping the computer awake while it runs
@@ -22,6 +22,7 @@ Options:
   -d, --display              Keep display on
   -i, --idle                 Keep system from idle sleeping
   -s, --sleep                Keep system from sleeping (Functionality and conditions for this to work vary by OS)
+  -a, --status_active        Keep status trackers active (e.g. Skype, MS Teams etc.)
       --completions <SHELL>  Generate shell completions [possible values: bash, elvish, fish, powershell, zsh]
   -w <PID>                   Wait for the process with the specified pid to exit. This option is ignored when used with the COMMAND argument
   -h, --help                 Print help information
@@ -31,7 +32,7 @@ Options:
 See [docs.rs/keepawake](https://docs.rs/keepawake) for library crate documentation and usage.
 
 ## Completions
-Use: `keepawake --completions <SHELL>` to generate a completion script, you will have to install it
+Use: `keep-active --completions <SHELL>` to generate a completion script, you will have to install it
 as appropriate for the specific shell you are using.
 
 ## Notes
