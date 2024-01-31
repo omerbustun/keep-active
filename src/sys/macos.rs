@@ -22,7 +22,7 @@ const kIOPMAssertionTypePreventUserIdleDisplaySleep: &str = "PreventUserIdleDisp
 #[allow(non_upper_case_globals)]
 const kIOPMAssertionTypePreventSystemSleep: &str = "PreventSystemSleep";
 
-pub struct KeepAwake {
+pub struct KeepActive {
     options: Options,
 
     display_assertion: u32,
@@ -30,7 +30,7 @@ pub struct KeepAwake {
     sleep_assertion: u32,
 }
 
-impl KeepAwake {
+impl KeepActive {
     pub fn new(options: Options) -> Result<Self> {
         let mut awake = Self {
             options,
@@ -94,7 +94,7 @@ impl KeepAwake {
     }
 }
 
-impl Drop for KeepAwake {
+impl Drop for KeepActive {
     fn drop(&mut self) {
         if self.display_assertion != 0 {
             unsafe {

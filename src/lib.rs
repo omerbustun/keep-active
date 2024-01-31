@@ -4,7 +4,7 @@
 //!
 //! ```
 //! # fn try_main() -> anyhow::Result<()> {
-//! let _awake = keepawake::Builder::default()
+//! let _awake = keepactive::Builder::default()
 //!     .display(true)
 //!     .reason("Video playback")
 //!     .app_name("My prog")
@@ -17,7 +17,7 @@
 //!
 //! ```
 //! # fn try_main() -> anyhow::Result<()> {
-//! let _awake = keepawake::Builder::default()
+//! let _awake = keepactive::Builder::default()
 //!     .display(true)
 //!     .idle(true)
 //!     .sleep(true)
@@ -55,29 +55,29 @@ struct Options {
     #[builder(setter(into), default = "\"User requested\".to_string()")]
     reason: String,
 
-    /// Name of the program keeping the system awake. Defaults to `"keepawake-rs"`. (Used on Linux)
-    #[builder(setter(into), default = "\"keepawake-rs\".to_string()")]
+    /// Name of the program keeping the system awake. Defaults to `"keep-active"`. (Used on Linux)
+    #[builder(setter(into), default = "\"keep-active\".to_string()")]
     app_name: String,
 
-    /// Reverse domain name of the program keeping the system awake. Defaults to `"io.github.segevfiner.keepawake-rs"`. (Used on Linux)
+    /// Reverse domain name of the program keeping the system awake. Defaults to `"io.github.segevfiner.keep-active"`. (Used on Linux)
     #[builder(
         setter(into),
-        default = "\"io.github.segevfiner.keepawake-rs\".to_string()"
+        default = "\"io.github.segevfiner.keep-active\".to_string()"
     )]
     app_reverse_domain: String,
 }
 
 impl Builder {
-    pub fn create(&self) -> Result<KeepAwake> {
-        Ok(KeepAwake {
-            _imp: sys::KeepAwake::new(self.build()?)?,
+    pub fn create(&self) -> Result<KeepActive> {
+        Ok(KeepActive {
+            _imp: sys::KeepActive::new(self.build()?)?,
         })
     }
 }
 
 /// Keeps the machine or display awake (as configured), until dropped. Create using [struct@Builder].
-pub struct KeepAwake {
-    _imp: sys::KeepAwake,
+pub struct KeepActive {
+    _imp: sys::KeepActive,
 }
 
 // TODO: gradual movement  

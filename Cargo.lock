@@ -1114,8 +1114,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "keepawake"
-version = "0.5.0"
+name = "keep-active"
+version = "0.1.0"
 dependencies = [
  "anyhow",
  "apple-sys",

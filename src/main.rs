@@ -12,8 +12,8 @@ use clap_complete::{generate, Shell};
 use shadow_rs::shadow;
 use sysinfo::{Pid, ProcessRefreshKind, System};
 
-use keepawake::Builder;
-use keepawake::simulate_activity;
+use keep_active::Builder;
+use keep_active::simulate_activity;
 
 shadow!(build);
 
@@ -66,7 +66,7 @@ fn main() -> Result<()> {
     }
 
     if let Some(shell) = cli.completions {
-        generate(shell, &mut Cli::command(), "keepawake", &mut io::stdout());
+        generate(shell, &mut Cli::command(), "keep-active", &mut io::stdout());
         return Ok(());
     }
 

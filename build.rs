@@ -9,7 +9,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     #[cfg(feature = "bin")]
     if env::var("CARGO_CFG_TARGET_OS").unwrap() == "windows" {
         winresource::WindowsResource::new()
-            .set_manifest_file("keepawake.exe.manifest")
+            .set_manifest_file("keep-active.exe.manifest")
             .compile()?;
     }
 

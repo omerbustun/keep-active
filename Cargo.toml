@@ -1,13 +1,13 @@
 [package]
-name = "keepawake"
-version = "0.5.0"
-authors = ["Segev Finer <segev208@gmail.com>"]
+name = "keep-active"
+version = "0.1.0"
+authors = ["Ömer Üstün <omerbustun@gmail.com>"]
 edition = "2021"
-rust-version = "1.63"
-description = "Keep your computer awake"
-repository = "https://github.com/segevfiner/keepawake-rs/"
+rust-version = "1.74"
+description = "Keep your computer awake and active"
+repository = "https://github.com/omerbustun/keep-active/"
 license = "MIT"
-keywords = ["caffeinate", "systemd-inhibit", "idle", "sleep", "power-management"]
+keywords = ["caffeinate", "systemd-inhibit", "idle", "sleep", "power-management", "status-tracking"]
 categories = ["command-line-utilities"]
 exclude = ["/tools/"]
 
@@ -19,7 +19,7 @@ strip = true
 lto = "thin"
 
 [[bin]]
-name = "keepawake"
+name = "keep-active"
 required-features = ["bin"]
 
 [dependencies]

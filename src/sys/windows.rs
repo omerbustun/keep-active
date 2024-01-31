@@ -16,14 +16,14 @@ use windows::Win32::System::Power::{
 
 use crate::Options;
 
-pub struct KeepAwake {
+pub struct KeepActive {
     options: Options,
     previous: EXECUTION_STATE,
 }
 
-impl KeepAwake {
+impl KeepActive {
     pub fn new(options: Options) -> Result<Self> {
-        let mut awake = KeepAwake {
+        let mut awake = KeepActive {
             options,
             previous: Default::default(),
         };
@@ -57,7 +57,7 @@ impl KeepAwake {
     }
 }
 
-impl Drop for KeepAwake {
+impl Drop for KeepActive {
     fn drop(&mut self) {
         unsafe {
             SetThreadExecutionState(self.previous);
