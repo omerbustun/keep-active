@@ -1,4 +1,6 @@
 # keep-active
+[![CI](https://github.com/omerbustun/keep-active/actions/workflows/ci.yml/badge.svg)](https://github.com/omerbustun/keep-active/actions/workflows/ci.yml)
+
 Fork of [keepawake-rs](https://github.com/segevfiner/keepawake-rs) with the intention of adding the ability to keep status trackers (e.g. Skype, MS Teams etc.) active.
 
 Keep your computer awake (and active!). Like [`caffeinate`], [`systemd-inhibit`]/[`gnome-session-inhibit`], or [PowerToys Awake], but cross-platform and written in [Rust].
