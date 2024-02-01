@@ -4,7 +4,7 @@
 //!
 //! ```
 //! # fn try_main() -> anyhow::Result<()> {
-//! let _awake = keepactive::Builder::default()
+//! let _awake = keep_active::Builder::default()
 //!     .display(true)
 //!     .reason("Video playback")
 //!     .app_name("My prog")
@@ -17,7 +17,7 @@
 //!
 //! ```
 //! # fn try_main() -> anyhow::Result<()> {
-//! let _awake = keepactive::Builder::default()
+//! let _awake = keep_active::Builder::default()
 //!     .display(true)
 //!     .idle(true)
 //!     .sleep(true)
