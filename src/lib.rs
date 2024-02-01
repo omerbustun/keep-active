@@ -28,9 +28,9 @@
 //! ```
 
 use anyhow::Result;
-use enigo::{Enigo, Key, MouseControllable, KeyboardControllable};
-use std::{thread, time::Duration};
 use derive_builder::Builder;
+use enigo::{Enigo, Key, KeyboardControllable, MouseControllable};
+use std::{thread, time::Duration};
 
 mod sys;
 
@@ -80,7 +80,7 @@ pub struct KeepActive {
     _imp: sys::KeepActive,
 }
 
-// TODO: gradual movement  
+// TODO: gradual movement
 //       exit gracefully on Ctrl+C
 pub fn simulate_activity() -> Result<(), Box<dyn std::error::Error>> {
     let mut enigo = Enigo::new();

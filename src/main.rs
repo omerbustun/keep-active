@@ -12,8 +12,8 @@ use clap_complete::{generate, Shell};
 use shadow_rs::shadow;
 use sysinfo::{Pid, ProcessRefreshKind, System};
 
-use keep_active::Builder;
 use keep_active::simulate_activity;
+use keep_active::Builder;
 
 shadow!(build);
 
@@ -34,7 +34,7 @@ struct Cli {
     sleep: bool,
 
     /// Keep status trackers active
-    #[arg(short = 'a', long)]  // Changed short option for status_active
+    #[arg(short = 'a', long)] // Changed short option for status_active
     status_active: bool,
 
     /// Generate shell completions
@@ -43,14 +43,13 @@ struct Cli {
 
     /// Wait for the process with the specified PID to exit.
     /// This option is ignored when used with the COMMAND argument.
-    #[arg(short = 'w', value_name = "PID")]  // Changed short option for wait
+    #[arg(short = 'w', value_name = "PID")] // Changed short option for wait
     wait: Option<u32>,
 
     /// Run the command and wait for it to exit, keeping the computer awake while it runs.
     #[arg(trailing_var_arg = true, value_hint = ValueHint::CommandWithArguments)]
     command: Vec<String>,
 }
-
 
 fn main() -> Result<()> {
     let cli = Cli::parse();
