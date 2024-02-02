@@ -44,10 +44,10 @@ jobs:
         shell: bash
         run: |
           shopt -s extglob
-          staging="keep-activee-${{ github.head_ref || github.ref_name }}-${{ matrix.target }}"
+          staging="keep-active-${{ github.head_ref || github.ref_name }}-${{ matrix.target }}"
           mkdir $staging
 
-          cp target/${{ matrix.target }}/release/keep-activee@(|.exe) $staging/
+          cp target/${{ matrix.target }}/release/keep-active@(|.exe) $staging/
           cp README.md CHANGELOG.md LICENSE $staging/
 
           tar zcf $staging.tar.gz $staging
