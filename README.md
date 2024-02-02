@@ -1,4 +1,5 @@
 # keep-active
+[![Crates.io](https://img.shields.io/crates/v/keep-active)](https://crates.io/crates/keep-active)
 [![CI](https://github.com/omerbustun/keep-active/actions/workflows/ci.yml/badge.svg)](https://github.com/omerbustun/keep-active/actions/workflows/ci.yml)
 
 Fork of [keepawake-rs](https://github.com/segevfiner/keepawake-rs) with the intention of adding the ability to keep status trackers (e.g. Skype, MS Teams etc.) active.
@@ -32,6 +33,16 @@ Options:
 ```
 
 See [docs.rs/keepawake](https://docs.rs/keepawake) for library crate documentation and usage.
+
+## Installation
+
+### Cargo
+```sh
+cargo install keep-active -F bin
+```
+
+### Binaries
+Download from https://github.com/omerbustun/keep-active/releases/latest.
 
 ## Completions
 Use: `keep-active --completions <SHELL>` to generate a completion script, you will have to install it
