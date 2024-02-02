@@ -80,19 +80,37 @@ pub struct KeepActive {
     _imp: sys::KeepActive,
 }
 
-// TODO: gradual movement
-//       exit gracefully on Ctrl+C
+// TODO: exit gracefully on Ctrl+C 
 pub fn simulate_activity() -> Result<(), Box<dyn std::error::Error>> {
     let mut enigo = Enigo::new();
 
     loop {
-        enigo.mouse_move_relative(100, 100);
-        thread::sleep(Duration::from_secs(1));
-        enigo.mouse_move_relative(-100, -100);
+        // Move right
+        for _ in 0..10 {
+            enigo.mouse_move_relative(1, 0);
+            thread::sleep(Duration::from_millis(100));
+        }
+        // Move down
+        for _ in 0..10 {
+            enigo.mouse_move_relative(0, 1);
+            thread::sleep(Duration::from_millis(100));
+        }
+        // Move left
+        for _ in 0..10 {
+            enigo.mouse_move_relative(-1, 0);
+            thread::sleep(Duration::from_millis(100));
+        }
+        // Move up
+        for _ in 0..10 {
+            enigo.mouse_move_relative(0, -1);
+            thread::sleep(Duration::from_millis(100));
+        }
 
+        // Simulate a key press to keep activity
         enigo.key_down(Key::Shift);
         enigo.key_up(Key::Shift);
 
-        thread::sleep(Duration::from_secs(2)); // TODO: make this configurable
+        thread::sleep(Duration::from_secs(60)); // TODO: Make this configurable
     }
 }
+
