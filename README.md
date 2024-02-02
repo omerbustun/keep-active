@@ -13,7 +13,7 @@ Keep your computer awake (and active!). Like [`caffeinate`], [`systemd-inhibit`]
 
 ## Usage
 ```
-Keep your computer awake
+Keep your computer awake and active
 
 Usage: keep-active [OPTIONS] [COMMAND]...
 
