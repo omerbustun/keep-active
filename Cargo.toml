@@ -7,7 +7,7 @@ rust-version = "1.74"
 description = "Keep your computer awake and active"
 repository = "https://github.com/omerbustun/keep-active/"
 license = "MIT"
-keywords = ["caffeinate", "systemd-inhibit", "idle", "sleep", "power-management", "status-tracking"]
+keywords = ["idle", "sleep", "power-management", "status-trackers", "systemd-inhibit"]
 categories = ["command-line-utilities"]
 exclude = ["/tools/"]
 
