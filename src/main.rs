@@ -56,7 +56,6 @@ fn main() -> Result<()> {
 
     // Start the activity simulation if the status_active flag is set
     if cli.status_active {
-        println!("Status active flag detected"); // Debug print
         thread::spawn(|| {
             if let Err(e) = simulate_activity() {
                 eprintln!("Failed to simulate activity: {}", e);
