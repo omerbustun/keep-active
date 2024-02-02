@@ -15,7 +15,7 @@ jobs:
         - os: windows-2022
           target: x86_64-pc-windows-msvc
         - os: ubuntu-22.04
-          target: x86_64-unknown-linux-musl
+          target: x86_64-unknown-linux-gnu
         - os: macos-12
           target: x86_64-apple-darwin
         - os: macos-12
@@ -31,11 +31,11 @@ jobs:
 
       - name: Install target
         run: rustup target add ${{ matrix.target }}
-        if: contains(fromJSON('["x86_64-unknown-linux-musl", "aarch64-apple-darwin"]'), matrix.target)
+        if: contains(fromJSON('["x86_64-unknown-linux-gnu", "aarch64-apple-darwin"]'), matrix.target)
 
       - name: Install musl-tools and libxdo-dev
-        if: matrix.target == 'x86_64-unknown-linux-musl'
-        run: sudo apt-get update && sudo apt-get install musl-tools xdotool
+        if: matrix.target == 'x86_64-unknown-linux-gnu'
+        run: sudo apt-get update && sudo apt-get install musl-tools libxdo-dev
 
       - name: Build
         run: cargo build --verbose --locked -F bin --release --target ${{ matrix.target }}
