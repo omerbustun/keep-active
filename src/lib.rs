@@ -59,10 +59,10 @@ struct Options {
     #[builder(setter(into), default = "\"keep-active\".to_string()")]
     app_name: String,
 
-    /// Reverse domain name of the program keeping the system awake. Defaults to `"io.github.segevfiner.keep-active"`. (Used on Linux)
+    /// Reverse domain name of the program keeping the system awake. Defaults to `"io.github.omerbustun.keep-active"`. (Used on Linux)
     #[builder(
         setter(into),
-        default = "\"io.github.segevfiner.keep-active\".to_string()"
+        default = "\"io.github.omerbustun.keep-active\".to_string()"
     )]
     app_reverse_domain: String,
 }
