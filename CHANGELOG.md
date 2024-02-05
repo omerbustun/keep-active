@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2024-02-03
+### Added
+- 'simulate_activity' function.
+
+### Changed
+- Updated dependencies.
+- CLI now has a --status-active flag to simulate activity.
+
+## [0.1.0] - 2024-01-18
+### Note
+- This marks the initial release of the forked version, resetting versioning from the original project. Starting point for the new forked project's versioning system.
+
+---
+
+## Forked from [keepawake-rs](https://github.com/segevfiner/keepawake-rs)
+Below is the changelog history from the original project before it was forked.
+
 ## Unreleased
 ### Changed
 - **BREAKING** Switched to `derive_builder` for the builder (The builder is now created using `default()`).
