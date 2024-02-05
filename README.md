@@ -32,7 +32,7 @@ Options:
   -V, --version              Print version information
 ```
 
-See [docs.rs/keepawake](https://docs.rs/keepawake) for library crate documentation and usage.
+See [docs.rs/keep-active](https://docs.rs/keep-active) for library crate documentation and usage.
 
 ## Installation
 
