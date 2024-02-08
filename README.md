@@ -1,6 +1,7 @@
 # keep-active
 [![Crates.io](https://img.shields.io/crates/v/keep-active)](https://crates.io/crates/keep-active)
 [![CI](https://github.com/omerbustun/keep-active/actions/workflows/ci.yml/badge.svg)](https://github.com/omerbustun/keep-active/actions/workflows/ci.yml)
+[![Release](https://github.com/omerbustun/keep-active/actions/workflows/release.yml/badge.svg)](https://github.com/omerbustun/keep-active/actions/workflows/release.yml)
 
 Fork of [keepawake-rs](https://github.com/segevfiner/keepawake-rs) with the intention of adding the ability to keep status trackers (e.g. Skype, MS Teams etc.) active.
 
