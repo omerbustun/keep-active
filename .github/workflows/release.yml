@@ -63,19 +63,19 @@ jobs:
           draft: true
           files: ${{ env.ASSET }}
 
-  publish-crate:
-    needs: [release] # This job depends on the successful completion of the 'release' job
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/') # Only runs this job if the push is a tag
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup Rust
-        uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          profile: minimal # Only install what's necessary
-
-      - name: Publish to crates.io
-        env:
-          CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_IO_TOKEN }} # Use the secret token
-        run: cargo publish --token $CARGO_REGISTRY_TOKEN
+#  publish-crate:
+#    needs: [release] # This job depends on the successful completion of the 'release' job
+#    runs-on: ubuntu-latest
+#    if: startsWith(github.ref, 'refs/tags/') # Only runs this job if the push is a tag
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      - name: Setup Rust
+#        uses: actions-rust-lang/setup-rust-toolchain@v1
+#        with:
+#          profile: minimal # Only install what's necessary
+#
+#      - name: Publish to crates.io
+#        env:
+#          CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_IO_TOKEN }} # Use the secret token
+#        run: cargo publish --token $CARGO_REGISTRY_TOKEN
