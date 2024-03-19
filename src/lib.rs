@@ -80,29 +80,18 @@ pub struct KeepActive {
     _imp: sys::KeepActive,
 }
 
-// TODO: exit gracefully on Ctrl+C 
+// TODO: exit gracefully on Ctrl+C
 pub fn simulate_activity() -> Result<(), Box<dyn std::error::Error>> {
     let mut enigo = Enigo::new();
+    let step_count = 20; // Increase for smoother circle
+    let radius = 1.0; // Radius for 2 pixel diameter circle
 
     loop {
-        // Move right
-        for _ in 0..10 {
-            enigo.mouse_move_relative(1, 0);
-            thread::sleep(Duration::from_millis(100));
-        }
-        // Move down
-        for _ in 0..10 {
-            enigo.mouse_move_relative(0, 1);
-            thread::sleep(Duration::from_millis(100));
-        }
-        // Move left
-        for _ in 0..10 {
-            enigo.mouse_move_relative(-1, 0);
-            thread::sleep(Duration::from_millis(100));
-        }
-        // Move up
-        for _ in 0..10 {
-            enigo.mouse_move_relative(0, -1);
+        for i in 0..step_count {
+            let angle = 2.0 * std::f64::consts::PI * (i as f64) / (step_count as f64);
+            let x = (radius * angle.cos()).round() as i32;
+            let y = (radius * angle.sin()).round() as i32;
+            enigo.mouse_move_relative(x, y);
             thread::sleep(Duration::from_millis(100));
         }
 
@@ -113,4 +102,3 @@ pub fn simulate_activity() -> Result<(), Box<dyn std::error::Error>> {
         thread::sleep(Duration::from_secs(60)); // TODO: Make this configurable
     }
 }
-
