@@ -1,6 +1,6 @@
 [package]
 name = "keep-active"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Ömer Üstün <omerbustun@gmail.com>"]
 edition = "2021"
 rust-version = "1.74"
