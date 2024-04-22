@@ -81,7 +81,6 @@ fn main() -> Result<()> {
             .create()?;
 
         if !cli.command.is_empty() {
-            // TODO Improve exit code in signal exit cases
             Command::new(&cli.command[0])
                 .args(&cli.command[1..])
                 .spawn()?
@@ -100,7 +99,7 @@ fn main() -> Result<()> {
             }
         } else {
             rx.recv().expect("Could not receive from channel.");
-            130
+            0
         }
     };
 
