@@ -29,7 +29,7 @@
 
 use anyhow::Result;
 use derive_builder::Builder;
-use enigo::{Enigo, Key, KeyboardControllable, MouseControllable};
+use enigo::{Enigo, MouseControllable};
 use std::{thread, time::Duration};
 
 mod sys;
@@ -80,25 +80,18 @@ pub struct KeepActive {
     _imp: sys::KeepActive,
 }
 
-// TODO: exit gracefully on Ctrl+C
 pub fn simulate_activity() -> Result<(), Box<dyn std::error::Error>> {
     let mut enigo = Enigo::new();
-    let step_count = 20; // Increase for smoother circle
-    let radius = 1.0; // Radius for 2 pixel diameter circle
-
+    
     loop {
-        for i in 0..step_count {
-            let angle = 2.0 * std::f64::consts::PI * (i as f64) / (step_count as f64);
-            let x = (radius * angle.cos()).round() as i32;
-            let y = (radius * angle.sin()).round() as i32;
-            enigo.mouse_move_relative(x, y);
-            thread::sleep(Duration::from_millis(100));
-        }
-
-        // Simulate a key press to keep activity
-        enigo.key_down(Key::Shift);
-        enigo.key_up(Key::Shift);
-
+        // Move mouse by just 1 pixel right
+        enigo.mouse_move_relative(1, 0);
+        thread::sleep(Duration::from_millis(50));
+        
+        // Move back to original position
+        enigo.mouse_move_relative(-1, 0);
+        
+        // Wait before next activity simulation
         thread::sleep(Duration::from_secs(60)); // TODO: Make this configurable
     }
 }
