@@ -27,9 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Improved SIGINT signal handling in the CLI to ensure graceful termination of processes when an interrupt signal is received.
 
-### Fixed
-- Improved SIGINT signal handling in the CLI to ensure graceful termination of processes when an interrupt signal is received.
-
 ## [0.1.1] - 2024-02-03
 ### Added
 - 'simulate_activity' function.
