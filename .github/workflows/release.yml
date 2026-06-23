@@ -16,26 +16,24 @@ jobs:
             target: x86_64-pc-windows-msvc
           - os: ubuntu-22.04
             target: x86_64-unknown-linux-gnu
-          - os: macos-12
+          - os: macos-13
             target: x86_64-apple-darwin
-          - os: macos-12
+          - os: macos-14
             target: aarch64-apple-darwin
 
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
 
       - name: Setup Rust Toolchain
         uses: actions-rust-lang/setup-rust-toolchain@v1
-
-      - name: Install target
-        run: rustup target add ${{ matrix.target }}
-        if: contains(fromJSON('["x86_64-unknown-linux-gnu", "aarch64-apple-darwin"]'), matrix.target)
+        with:
+          target: ${{ matrix.target }}
 
       - name: Install libxdo-dev
         if: matrix.target == 'x86_64-unknown-linux-gnu'
-        run: sudo apt-get update && sudo apt-get install libxdo-dev
+        run: sudo apt-get update && sudo apt-get install -y libxdo-dev
 
       - name: Build
         run: cargo build --verbose --locked -F bin --release --target ${{ matrix.target }}
@@ -51,13 +49,13 @@ jobs:
           tar zcf $staging.tar.gz $staging
           echo "ASSET=$staging.tar.gz" >> $GITHUB_ENV
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
-          name: release
+          name: release-${{ matrix.target }}
           path: ${{ env.ASSET }}
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           draft: true
@@ -68,12 +66,15 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/') # Only runs this job if the push is a tag
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
 
       - name: Setup Rust
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           profile: minimal # Only install what's necessary
+
+      - name: Install libxdo-dev
+        run: sudo apt-get update && sudo apt-get install -y libxdo-dev
 
       - name: Publish to crates.io
         env:
