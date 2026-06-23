@@ -26,15 +26,30 @@ Arguments:
 Options:
   -d, --display              Keep display on
   -i, --idle                 Keep system from idle sleeping
-  -s, --sleep                Keep system from sleeping (Functionality and conditions for this to work vary by OS)
-  -a, --status_active        Keep status trackers active (e.g. Skype, MS Teams etc.)
+  -s, --sleep                Keep system from explicitly sleeping (Functionality and conditions for this to work vary by OS)
+  -a, --status-active        Keep status trackers active (e.g. Skype, MS Teams etc.) by simulating activity
+      --method <METHOD>      How to simulate activity (used with --status-active) [default: mouse] [possible values: mouse, key]
+      --interval <SECONDS>   Interval between simulated activity events, in seconds (used with --status-active) [default: 60]
       --completions <SHELL>  Generate shell completions [possible values: bash, elvish, fish, powershell, zsh]
-  -w <PID>                   Wait for the process with the specified pid to exit. This option is ignored when used with the COMMAND argument
-  -h, --help                 Print help information
-  -V, --version              Print version information
+  -w <PID>                   Wait for the process with the specified PID to exit. This option is ignored when used with the COMMAND argument
+  -h, --help                 Print help
+  -V, --version              Print version
 ```
 
 See [docs.rs/keep-active](https://docs.rs/keep-active) for library crate documentation and usage.
+
+### Keeping status trackers active
+`--status-active` (`-a`) simulates user input on an interval (`--interval`, default 60s) so trackers like
+Skype or MS Teams keep showing you as active. Two methods are available via `--method`:
+
+- `mouse` (default): nudges the cursor one pixel and immediately back. Most compatible, but the movement is visible.
+- `key`: taps the `F15` key (which virtually nothing binds) with no cursor movement. Distraction-free, but some
+  trackers may not treat it as activity — if `key` doesn't keep you active, fall back to `mouse`.
+
+```sh
+keep-active -a --method key      # no visible mouse movement
+keep-active -a --interval 30     # mouse nudge every 30 seconds
+```
 
 ## Installation
 

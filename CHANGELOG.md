@@ -4,9 +4,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.2] - 2024-04-23
+## [0.2.0] - 2026-06-23
+### Added
+- `--method <mouse|key>` option to choose how activity is simulated. `mouse` (default) nudges the cursor one pixel and back; `key` taps `F15` with no cursor movement, for a distraction-free option.
+- `--interval <SECONDS>` option to configure the activity-simulation interval (defaults to 60s).
+- `activity` Cargo feature gating the activity simulator (and its `enigo` dependency); enabled automatically by the `bin` feature.
+
 ### Changed
-- Updated the 'simulate_activity' function to move mouse cursor in a circular pattern.
+- **BREAKING** Rebased onto upstream [keepawake-rs] 0.6.0: the library now exposes a custom `Error`/`Result` type (via `thiserror`) instead of returning `anyhow::Error`. `anyhow` is now only pulled in under the `bin` feature.
+- **BREAKING** Replaced the `simulate_activity()` free function with an RAII `ActivitySimulator` that stops and joins its background thread when dropped, surfaces backend-initialization errors, and sleeps in interruptible slices.
+- macOS backend migrated from the unmaintained `apple-sys`/`core-foundation` crates to `objc2-core-foundation`/`objc2-io-kit`.
+- Updated dependencies: `zbus` 3 → 5 (`#[dbus_proxy]` → `#[proxy]`), `windows` 0.52 → 0.62, `sysinfo` 0.30 → 0.37, `shadow-rs` 0.26 → 1.4, `derive_builder` 0.12 → 0.20, `enigo` 0.1 → 0.6.
+
+### Fixed
+- Windows: use `windows::core::Error::from_thread()` (`from_win32()` was removed in `windows` 0.62).
+- `-w <PID>` now blocks on the process directly instead of polling every 200 ms (sysinfo 0.37 API).
+- The CLI now exits with code `130` on Ctrl-C (128 + SIGINT) instead of `0`.
+
+[keepawake-rs]: https://github.com/segevfiner/keepawake-rs
+
+## [0.1.2] - 2024-04-23
+### Fixed
+- Improved SIGINT signal handling in the CLI to ensure graceful termination of processes when an interrupt signal is received.
 
 ### Fixed
 - Improved SIGINT signal handling in the CLI to ensure graceful termination of processes when an interrupt signal is received.

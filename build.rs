@@ -2,9 +2,13 @@
 use std::env;
 use std::error::Error;
 
+#[allow(unused_imports)]
+#[cfg(feature = "bin")]
+use shadow_rs::ShadowBuilder;
+
 fn main() -> Result<(), Box<dyn Error>> {
     #[cfg(feature = "bin")]
-    shadow_rs::new()?;
+    ShadowBuilder::builder().build()?;
 
     #[cfg(feature = "bin")]
     if env::var("CARGO_CFG_TARGET_OS").unwrap() == "windows" {
