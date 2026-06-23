@@ -1,9 +1,9 @@
-//! Keep your computer awake.
+//! Keep your computer awake (and active).
 //!
 //! # Examples
 //!
 //! ```
-//! # fn try_main() -> anyhow::Result<()> {
+//! # fn try_main() -> keep_active::Result<()> {
 //! let _awake = keep_active::Builder::default()
 //!     .display(true)
 //!     .reason("Video playback")
@@ -16,7 +16,7 @@
 //! ```
 //!
 //! ```
-//! # fn try_main() -> anyhow::Result<()> {
+//! # fn try_main() -> keep_active::Result<()> {
 //! let _awake = keep_active::Builder::default()
 //!     .display(true)
 //!     .idle(true)
@@ -27,12 +27,36 @@
 //! # try_main();
 //! ```
 
-use anyhow::Result;
 use derive_builder::Builder;
-use enigo::{Enigo, MouseControllable};
-use std::{thread, time::Duration};
+use thiserror::Error;
 
 mod sys;
+
+#[cfg(feature = "activity")]
+pub mod activity;
+
+#[cfg(feature = "activity")]
+pub use activity::{ActivityError, ActivityMethod, ActivitySimulator};
+
+/// A system error whose actual type varies by target.
+pub use sys::Error as SystemError;
+
+/// Error type.
+#[derive(Error, Debug)]
+pub enum Error {
+    #[error("builder: {0}")]
+    Builder(#[from] BuilderError),
+
+    #[error("system: {0}")]
+    System(#[from] SystemError),
+
+    #[cfg(feature = "activity")]
+    #[error("activity: {0}")]
+    Activity(#[from] ActivityError),
+}
+
+/// A specialized [`Result`](std::result::Result) type for this crate.
+pub type Result<T, E = Error> = std::result::Result<T, E>;
 
 #[derive(Builder, Debug)]
 #[builder(public, name = "Builder", build_fn(private))]
@@ -46,7 +70,7 @@ struct Options {
     #[builder(default)]
     idle: bool,
 
-    /// Prevent the system from sleeping. Only works under certain, OS dependant, conditions.
+    /// Prevent the system from explicitly sleeping. Only works under certain, OS dependant, conditions.
     #[builder(default)]
     sleep: bool,
 
@@ -68,6 +92,7 @@ struct Options {
 }
 
 impl Builder {
+    /// Create the [`KeepActive`].
     pub fn create(&self) -> Result<KeepActive> {
         Ok(KeepActive {
             _imp: sys::KeepActive::new(self.build()?)?,
@@ -78,20 +103,4 @@ impl Builder {
 /// Keeps the machine or display awake (as configured), until dropped. Create using [struct@Builder].
 pub struct KeepActive {
     _imp: sys::KeepActive,
-}
-
-pub fn simulate_activity() -> Result<(), Box<dyn std::error::Error>> {
-    let mut enigo = Enigo::new();
-    
-    loop {
-        // Move mouse by just 1 pixel right
-        enigo.mouse_move_relative(1, 0);
-        thread::sleep(Duration::from_millis(50));
-        
-        // Move back to original position
-        enigo.mouse_move_relative(-1, 0);
-        
-        // Wait before next activity simulation
-        thread::sleep(Duration::from_secs(60)); // TODO: Make this configurable
-    }
 }

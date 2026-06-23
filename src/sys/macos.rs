@@ -4,14 +4,22 @@
 //!
 //! [`IOPMAssertionCreateWithName`]: https://developer.apple.com/documentation/iokit/1557134-iopmassertioncreatewithname
 
-use anyhow::{anyhow, Result};
-use apple_sys::IOKit::{
-    kIOPMAssertionLevelOn, kIOReturnSuccess, CFStringRef, IOPMAssertionCreateWithName,
+use objc2_core_foundation::CFString;
+use objc2_io_kit::{
+    kIOPMAssertionLevelOn, kIOReturnSuccess, IOPMAssertionCreateWithName, IOPMAssertionID,
     IOPMAssertionRelease,
 };
-use core_foundation::{base::TCFType, string::CFString};
+use thiserror::Error;
 
 use crate::Options;
+
+#[derive(Error, Debug)]
+#[error("IO error: {code:#010x}")]
+pub struct IOError {
+    code: i32,
+}
+
+pub type Error = IOError;
 
 #[allow(non_upper_case_globals)]
 const kIOPMAssertionTypePreventUserIdleSystemSleep: &str = "PreventUserIdleSystemSleep";
@@ -25,13 +33,13 @@ const kIOPMAssertionTypePreventSystemSleep: &str = "PreventSystemSleep";
 pub struct KeepActive {
     options: Options,
 
-    display_assertion: u32,
-    idle_assertion: u32,
-    sleep_assertion: u32,
+    display_assertion: IOPMAssertionID,
+    idle_assertion: IOPMAssertionID,
+    sleep_assertion: IOPMAssertionID,
 }
 
 impl KeepActive {
-    pub fn new(options: Options) -> Result<Self> {
+    pub fn new(options: Options) -> Result<Self, Error> {
         let mut awake = Self {
             options,
             display_assertion: 0,
@@ -42,50 +50,54 @@ impl KeepActive {
         Ok(awake)
     }
 
-    fn set(&mut self) -> Result<()> {
+    fn set(&mut self) -> Result<(), Error> {
         if self.options.display {
             unsafe {
+                let assertion_type =
+                    CFString::from_static_str(kIOPMAssertionTypePreventUserIdleDisplaySleep);
+                let assertion_name = CFString::from_str(&self.options.reason);
                 let result = IOPMAssertionCreateWithName(
-                    // TODO Are those casts the best way? No way to make a const CFString?
-                    CFString::from_static_string(kIOPMAssertionTypePreventUserIdleDisplaySleep)
-                        .as_concrete_TypeRef() as CFStringRef,
+                    Some(&assertion_type),
                     kIOPMAssertionLevelOn,
-                    CFString::new(&self.options.reason).as_concrete_TypeRef() as CFStringRef,
+                    Some(&assertion_name),
                     &mut self.display_assertion,
                 );
-                if result != kIOReturnSuccess as i32 {
-                    // TODO Better error?
-                    return Err(anyhow!("IO error: {:#x}", result));
+                if result != kIOReturnSuccess {
+                    return Err(Error { code: result });
                 }
             }
         }
 
         if self.options.idle {
             unsafe {
+                let assertion_type =
+                    CFString::from_static_str(kIOPMAssertionTypePreventUserIdleSystemSleep);
+                let assertion_name = CFString::from_str(&self.options.reason);
                 let result = IOPMAssertionCreateWithName(
-                    CFString::from_static_string(kIOPMAssertionTypePreventUserIdleSystemSleep)
-                        .as_concrete_TypeRef() as CFStringRef,
+                    Some(&assertion_type),
                     kIOPMAssertionLevelOn,
-                    CFString::new(&self.options.reason).as_concrete_TypeRef() as CFStringRef,
+                    Some(&assertion_name),
                     &mut self.idle_assertion,
                 );
-                if result != kIOReturnSuccess as i32 {
-                    return Err(anyhow!("IO error: {:#x}", result));
+                if result != kIOReturnSuccess {
+                    return Err(Error { code: result });
                 }
             }
         }
 
         if self.options.sleep {
             unsafe {
+                let assertion_type =
+                    CFString::from_static_str(kIOPMAssertionTypePreventSystemSleep);
+                let assertion_name = CFString::from_str(&self.options.reason);
                 let result = IOPMAssertionCreateWithName(
-                    CFString::from_static_string(kIOPMAssertionTypePreventSystemSleep)
-                        .as_concrete_TypeRef() as CFStringRef,
+                    Some(&assertion_type),
                     kIOPMAssertionLevelOn,
-                    CFString::new(&self.options.reason).as_concrete_TypeRef() as CFStringRef,
+                    Some(&assertion_name),
                     &mut self.sleep_assertion,
                 );
-                if result != kIOReturnSuccess as i32 {
-                    return Err(anyhow!("IO error: {:#x}", result));
+                if result != kIOReturnSuccess {
+                    return Err(Error { code: result });
                 }
             }
         }
@@ -97,21 +109,15 @@ impl KeepActive {
 impl Drop for KeepActive {
     fn drop(&mut self) {
         if self.display_assertion != 0 {
-            unsafe {
-                IOPMAssertionRelease(self.display_assertion);
-            }
+            IOPMAssertionRelease(self.display_assertion);
         }
 
         if self.idle_assertion != 0 {
-            unsafe {
-                IOPMAssertionRelease(self.idle_assertion);
-            }
+            IOPMAssertionRelease(self.idle_assertion);
         }
 
         if self.sleep_assertion != 0 {
-            unsafe {
-                IOPMAssertionRelease(self.sleep_assertion);
-            }
+            IOPMAssertionRelease(self.sleep_assertion);
         }
     }
 }
