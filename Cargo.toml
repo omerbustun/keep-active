@@ -1,6 +1,6 @@
 [package]
 name = "keep-active"
-version = "0.1.2"
+version = "0.2.0"
 authors = ["Ömer Üstün <omerbustun@gmail.com>"]
 edition = "2021"
 rust-version = "1.84"
@@ -12,7 +12,18 @@ categories = ["command-line-utilities"]
 exclude = ["/tools/"]
 
 [features]
-bin = ["dep:clap", "dep:clap_complete", "dep:ctrlc", "dep:shadow-rs", "dep:sysinfo", "dep:winresource"]
+# Simulate user activity (mouse movement) to keep status trackers "active".
+activity = ["dep:enigo"]
+bin = [
+    "dep:anyhow",
+    "dep:clap",
+    "dep:clap_complete",
+    "dep:ctrlc",
+    "dep:shadow-rs",
+    "dep:sysinfo",
+    "dep:winresource",
+    "activity",
+]
 
 [profile.release]
 strip = true
@@ -23,29 +34,30 @@ name = "keep-active"
 required-features = ["bin"]
 
 [dependencies]
-anyhow = "1.0.65"
+anyhow = { version = "1.0.65", optional = true }
 cfg-if = "1.0.0"
 clap = { version = "4.0.2", features = ["derive"], optional = true }
 clap_complete = { version = "4.0.2", optional = true }
 ctrlc = { version = "3.2.3", features = ["termination"], optional = true }
-enigo = "0.1.3"
-derive_builder = "0.12.0"
-shadow-rs = { version = "0.26.1", optional = true }
-sysinfo = { version = "0.30.5", optional = true }
+derive_builder = "0.20.2"
+enigo = { version = "0.6.1", optional = true }
+shadow-rs = { version = "1.4.0", optional = true }
+sysinfo = { version = "0.37.2", optional = true }
+thiserror = "2.0.11"
 
 [target.'cfg(windows)'.dependencies.windows]
-version = "0.52.0"
+version = "0.62.2"
 features = [
     "Win32_System_Power"
 ]
 
 [target.'cfg(target_os = "linux")'.dependencies]
-zbus = "3.5.0"
+zbus = "5.3.0"
 
 [target.'cfg(target_os = "macos")'.dependencies]
-apple-sys = { version = "0.2.0", features = ["CoreFoundation", "IOKit"] }
-core-foundation = "0.9.3"
+objc2-core-foundation = { version = "0.3.2", features = ["CFString"] }
+objc2-io-kit = { version = "0.3.2", features = ["pwr_mgt"] }
 
 [build-dependencies]
-shadow-rs = { version = "0.26.1", optional = true }
+shadow-rs = { version = "1.4.0", optional = true }
 winresource = { version = "0.1.17", optional = true }
